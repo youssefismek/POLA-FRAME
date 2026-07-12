@@ -400,16 +400,26 @@ export default function App() {
         filename = `polaroid-pack-${Date.now()}.png`;
       }
 
-      const dataUrl = canvas.toDataURL('image/png');
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) {
+        throw new Error('Failed to create canvas blob');
+      }
 
-      // Trigger traditional download click with body appending for maximum browser compatibility
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Trigger download click with body appending for maximum browser compatibility
       const link = document.createElement('a');
       link.download = filename;
-      link.href = dataUrl;
+      link.href = blobUrl;
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+
+      // Clean up after a delay
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      }, 1000);
     } catch (e) {
       console.error('HD Render failed:', e);
       alert('An error occurred during high-definition photo rendering. Please try again with a different image.');
