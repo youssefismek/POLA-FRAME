@@ -431,65 +431,49 @@ export default function App() {
       {/* Main Studio Body */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         
-        {/* Settings panel sidebar */}
-        <Sidebar
-          mode={mode}
-          cards={activeCards}
-          selectedCardId={selectedCardId}
-          collageSettings={collageSettings}
-          onUpdateCardFilter={handleUpdateCardFilter}
-          onUpdateCardFrame={handleUpdateCardFrame}
-          onUpdateCardLayout={handleUpdateCardLayout}
-          onUpdateCardDoubleExposure={handleUpdateCardDoubleExposure}
-          onUpdateCollageSettings={(updated) => setCollageSettings(prev => ({ ...prev, ...updated }))}
-          onDeleteCard={handleDeleteCard}
-          onLoadMockup={handleLoadMockup}
-          onReplaceCardImage={handleReplaceCardImage}
-        />
-
         {/* Studio tabletop board */}
-        <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className="h-[46vh] lg:h-full lg:flex-1 flex flex-col min-h-0 border-b-3 lg:border-b-0 lg:border-r-3 border-black">
           
           {/* Quick aesthetic header guide - 90s style */}
           {activeCards.length === 0 && (
-            <div className="p-4 bg-[#c0c0c0] border-b-[3px] border-black text-center animate-fade-in shadow-md flex flex-col gap-3">
-              <div>
-                <p className="text-xs text-black font-pixel uppercase tracking-widest text-[14px] font-bold">
-                  ⚡ Boot the camera with a retro sample photo:
-                </p>
-                <div className="flex items-center justify-center gap-2.5 mt-1.5 flex-wrap">
+            <div className="p-3 bg-[#c0c0c0] border-b-[3px] border-black text-center animate-fade-in shadow-md flex items-center justify-center gap-2.5">
+              <span className="text-[11px] md:text-xs text-black font-pixel uppercase tracking-widest font-bold">
+                ⚡ Presets / Samples:
+              </span>
+              <select
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (!val) return;
+                  if (val.startsWith('sample-')) {
+                    const idx = parseInt(val.split('-')[1]);
+                    handleLoadSample(idx);
+                  } else if (val.startsWith('mockup-')) {
+                    const id = val.split('mockup-')[1];
+                    handleLoadMockup(id);
+                  }
+                  e.target.value = ""; // Reset after selection
+                }}
+                className="bg-yellow-300 hover:bg-yellow-200 text-[11px] md:text-xs font-black text-black px-3 py-1.5 border-2 border-black brutal-shadow cursor-pointer font-retro outline-none"
+                defaultValue=""
+              >
+                <option value="" disabled>-- Load a Retro Demo --</option>
+                <optgroup label="Sample Camera Photos">
                   {SAMPLE_PHOTOS.map((sample, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleLoadSample(idx)}
-                      className="px-4 py-1.5 bg-yellow-300 hover:bg-yellow-200 text-xs font-black text-black transition-all cursor-pointer flex items-center gap-1.5 border-2 border-black brutal-shadow"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-black" />
-                      {sample.name}
-                    </button>
+                    <option key={idx} value={`sample-${idx}`}>
+                      📸 {sample.name}
+                    </option>
                   ))}
-                </div>
-              </div>
-              
-              {mode === 'collage' && (
-                <div className="pt-2.5 border-t border-black/10">
-                  <p className="text-xs text-black font-pixel uppercase tracking-widest text-[14px] font-bold">
-                    🌌 Or load a built-in mockup template scene:
-                  </p>
-                  <div className="flex items-center justify-center gap-2.5 mt-1.5 flex-wrap">
+                </optgroup>
+                {mode === 'collage' && (
+                  <optgroup label="Mockup Template Scenes">
                     {MOCKUP_PRESETS.map((mockup) => (
-                      <button
-                        key={mockup.id}
-                        onClick={() => handleLoadMockup(mockup.id)}
-                        className="px-3 py-1.5 bg-cyan-300 hover:bg-cyan-200 text-[11px] font-black text-black transition-all cursor-pointer flex items-center gap-1.5 border-2 border-black brutal-shadow"
-                      >
-                        <ImageIcon className="w-3.5 h-3.5 text-black" />
-                        {mockup.name}
-                      </button>
+                      <option key={mockup.id} value={`mockup-${mockup.id}`}>
+                        🌌 {mockup.name}
+                      </option>
                     ))}
-                  </div>
-                </div>
-              )}
+                  </optgroup>
+                )}
+              </select>
             </div>
           )}
 
@@ -505,6 +489,24 @@ export default function App() {
             onUpdateCardLayout={handleUpdateCardLayout}
             onUpdateCardLayers={handleUpdateCardLayers}
             onUploadSingleImage={handleUploadSingleImage}
+            onReplaceCardImage={handleReplaceCardImage}
+          />
+        </div>
+
+        {/* Settings panel sidebar */}
+        <div className="h-[38vh] lg:h-full w-full lg:w-[380px] shrink-0 min-h-0">
+          <Sidebar
+            mode={mode}
+            cards={activeCards}
+            selectedCardId={selectedCardId}
+            collageSettings={collageSettings}
+            onUpdateCardFilter={handleUpdateCardFilter}
+            onUpdateCardFrame={handleUpdateCardFrame}
+            onUpdateCardLayout={handleUpdateCardLayout}
+            onUpdateCardDoubleExposure={handleUpdateCardDoubleExposure}
+            onUpdateCollageSettings={(updated) => setCollageSettings(prev => ({ ...prev, ...updated }))}
+            onDeleteCard={handleDeleteCard}
+            onLoadMockup={handleLoadMockup}
             onReplaceCardImage={handleReplaceCardImage}
           />
         </div>

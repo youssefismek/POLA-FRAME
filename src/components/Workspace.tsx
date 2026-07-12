@@ -126,7 +126,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({
   return (
     <div 
       id="workspace-container"
-      className="flex-1 flex flex-col items-center justify-center p-6 bg-[#008080] retro-grid relative overflow-y-auto min-h-0"
+      className="flex-1 flex flex-col items-center justify-center p-3 md:p-6 bg-[#008080] retro-grid relative overflow-y-auto min-h-0"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -201,26 +201,26 @@ export const Workspace: React.FC<WorkspaceProps> = ({
         <div className="w-full max-w-5xl flex flex-col gap-4">
           
           {/* Collage Toolbar - Grey 90s system control bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#c0c0c0] border-3 border-black p-4 rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#c0c0c0] border-3 border-black p-3 md:p-4 rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center gap-3">
               <button
                 onClick={triggerFileInput}
-                className="flex items-center gap-2 bg-yellow-300 hover:bg-yellow-200 text-black font-extrabold text-xs px-5 py-2.5 rounded-none border-2 border-black brutal-shadow transition-all cursor-pointer uppercase tracking-wider font-pixel"
+                className="flex items-center gap-2 bg-yellow-300 hover:bg-yellow-200 text-black font-extrabold text-xs px-4 md:px-5 py-2 md:py-2.5 rounded-none border-2 border-black brutal-shadow transition-all cursor-pointer uppercase tracking-wider font-pixel"
               >
                 <Plus className="w-4 h-4 text-black" />
                 Add Photo Card
               </button>
               {cards.length > 0 && (
-                <span className="text-black font-mono text-[11px] uppercase tracking-wider font-bold bg-white px-3 py-1 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                  {cards.length} Card{cards.length > 1 ? 's' : ''} on table
+                <span className="text-black font-mono text-[11px] uppercase tracking-wider font-bold bg-white px-2.5 py-1 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                  {cards.length} Card{cards.length > 1 ? 's' : ''}
                 </span>
               )}
             </div>
 
             {/* Quick Selected Card Action Bar */}
             {selectedCardId && (
-              <div className="flex items-center gap-1.5 bg-white p-2 rounded-none border-2 border-black animate-fade-in text-xs text-black shadow-[2px_2px_0px_0px_#000]">
-                <span className="px-2 font-pixel text-[13px] text-black border-r-2 border-black mr-1 uppercase font-bold">
+              <div className="flex flex-wrap items-center gap-1.5 bg-white p-1.5 md:p-2 rounded-none border-2 border-black animate-fade-in text-xs text-black shadow-[2px_2px_0px_0px_#000]">
+                <span className="px-1.5 font-pixel text-[11px] md:text-[13px] text-black border-r-2 border-black mr-1 uppercase font-bold">
                   Card:
                 </span>
                 
@@ -230,10 +230,10 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                     <button
                       onClick={() => replaceFileInputRef.current?.click()}
                       title="Replace Selected Photo"
-                      className="p-1.5 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer flex items-center gap-1 text-[11px] font-bold"
+                      className="p-1 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer flex items-center gap-1 text-[10px] md:text-[11px] font-bold"
                     >
                       <Upload className="w-3.5 h-3.5" />
-                      <span>Replace</span>
+                      <span className="hidden sm:inline">Replace</span>
                     </button>
                     <input
                       type="file"
@@ -259,7 +259,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                     }
                   }}
                   title="Rotate 15° Right"
-                  className="p-1.5 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
+                  className="p-1 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
                 >
                   <RotateCw className="w-3.5 h-3.5" />
                 </button>
@@ -273,7 +273,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                     }
                   }}
                   title="Scale Up"
-                  className="p-1.5 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
+                  className="p-1 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
@@ -282,14 +282,14 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                 <button
                   onClick={() => onUpdateCardLayers(selectedCardId, 'up')}
                   title="Bring Forward"
-                  className="p-1.5 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
+                  className="p-1 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
                 >
                   <ArrowUp className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => onUpdateCardLayers(selectedCardId, 'down')}
                   title="Send Backward"
-                  className="p-1.5 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
+                  className="p-1 hover:bg-yellow-300 hover:text-black border-2 border-transparent hover:border-black rounded-none transition-all cursor-pointer"
                 >
                   <ArrowDown className="w-3.5 h-3.5" />
                 </button>
@@ -298,7 +298,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                 <button
                   onClick={() => onDeleteCard(selectedCardId)}
                   title="Delete Card"
-                  className="p-1.5 hover:bg-red-500 hover:text-white border-2 border-transparent hover:border-black rounded-none text-red-500 transition-all ml-1 cursor-pointer"
+                  className="p-1 hover:bg-red-500 hover:text-white border-2 border-transparent hover:border-black rounded-none text-red-500 transition-all ml-1 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -306,81 +306,78 @@ export const Workspace: React.FC<WorkspaceProps> = ({
             )}
           </div>
 
-          {/* Collage Tabletop Board */}
-          <div 
-            id="collage-board"
-            ref={boardRef}
-            style={getCollageBgStyle()}
-            className={`
-              w-full rounded-none relative shadow-xl border-3 border-black overflow-hidden select-none transition-all duration-300 brutal-shadow
-              ${getBoardAspectRatioClass()}
-              ${getCollageBgClass()}
-            `}
-            onClick={() => {
-              // Click outside any cards to deselect
-            }}
-          >
-            {/* Texture mesh filter if concrete/cork */}
-            {collageSettings.backgroundTexture === 'concrete' && (
-              <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-            )}
-
-            {/* Mockup HTML Text Overlay */}
-            {(() => {
-              const activeMockup = collageSettings.mockupId 
-                ? MOCKUP_PRESETS.find(m => m.id === collageSettings.mockupId) 
-                : null;
-              if (activeMockup && activeMockup.textOverlay) {
-                return (
-                  <div 
-                    style={{
-                      position: 'absolute',
-                      left: `${activeMockup.textOverlay.x}%`,
-                      top: `${activeMockup.textOverlay.y}%`,
-                      transform: `translate(-50%, -50%) rotate(${activeMockup.textOverlay.rotation || 0}deg)`,
-                      fontFamily: activeMockup.textOverlay.fontFamily,
-                      fontSize: `calc(${activeMockup.textOverlay.fontSize}px * 0.45 + 1vw)`,
-                      color: activeMockup.textOverlay.color,
-                      textAlign: activeMockup.textOverlay.align as any,
-                      fontWeight: 'bold',
-                      lineHeight: 1.15,
-                      whiteSpace: 'pre-line',
-                      pointerEvents: 'none',
-                      zIndex: 2,
-                    }}
-                  >
-                    {activeMockup.textOverlay.text}
-                  </div>
-                );
-              }
-              return null;
-            })()}
-
-            {cards.length === 0 ? (
-              /* Collage Empty State - beautiful 90s OS box */
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#008080]/30 backdrop-blur-xs">
-                <div className="bg-[#c0c0c0] p-6 rounded-none border-[3px] border-black brutal-shadow max-w-sm flex flex-col items-center">
-                  <div className="w-full bg-[#000080] text-white text-xs px-2 py-1 font-retro tracking-wide flex justify-between items-center mb-4">
-                    <span>POLAFRAME DESKTOP INSTRUCTION</span>
-                    <span className="font-bold cursor-pointer">X</span>
-                  </div>
-                  <button
-                    onClick={triggerFileInput}
-                    className="group flex flex-col items-center cursor-pointer"
-                  >
-                    <div className="w-16 h-16 rounded-none bg-white border-2 border-black group-hover:bg-yellow-300 group-hover:text-black flex items-center justify-center text-black transition-all duration-100 mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                      <Plus className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-black font-pixel text-[17px] uppercase tracking-wide font-bold">Start Your Photo Pack</h3>
-                    <p className="text-black text-xs font-mono mt-2 max-w-xs leading-relaxed">
-                      Click to boot-up your device and scatter your first Polaroid photo card on this digital tabletop board!
-                    </p>
-                  </button>
+          {cards.length === 0 ? (
+            /* Collage Empty State - standalone beautiful 90s OS box */
+            <div className="w-full flex items-center justify-center py-8">
+              <div className="bg-[#c0c0c0] p-5 md:p-6 rounded-none border-[3px] border-black brutal-shadow w-full max-w-sm flex flex-col items-center">
+                <div className="w-full bg-[#000080] text-white text-xs px-2 py-1 font-retro tracking-wide flex justify-between items-center mb-4 select-none">
+                  <span>POLAFRAME DESKTOP INSTRUCTION</span>
+                  <span className="font-bold cursor-pointer">X</span>
                 </div>
+                <button
+                  onClick={triggerFileInput}
+                  className="group flex flex-col items-center cursor-pointer text-center"
+                >
+                  <div className="w-16 h-16 rounded-none bg-white border-2 border-black group-hover:bg-yellow-300 group-hover:text-black flex items-center justify-center text-black transition-all duration-100 mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <Plus className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-black font-pixel text-[15px] md:text-[17px] uppercase tracking-wide font-bold">Start Your Photo Pack</h3>
+                  <p className="text-black text-xs font-mono mt-2 leading-relaxed max-w-xs">
+                    Click here to open the camera files and scatter your first Polaroid photo card on this digital tabletop board!
+                  </p>
+                </button>
               </div>
-            ) : (
-              /* Scatter Polaroid Cards */
-              cards.map((card) => (
+            </div>
+          ) : (
+            /* Collage Tabletop Board */
+            <div 
+              id="collage-board"
+              ref={boardRef}
+              style={getCollageBgStyle()}
+              className={`
+                w-full rounded-none relative shadow-xl border-3 border-black overflow-hidden select-none transition-all duration-300 brutal-shadow
+                ${getBoardAspectRatioClass()}
+                ${getCollageBgClass()}
+              `}
+            >
+              {/* Texture mesh filter if concrete/cork */}
+              {collageSettings.backgroundTexture === 'concrete' && (
+                <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
+              )}
+
+              {/* Mockup HTML Text Overlay */}
+              {(() => {
+                const activeMockup = collageSettings.mockupId 
+                  ? MOCKUP_PRESETS.find(m => m.id === collageSettings.mockupId) 
+                  : null;
+                if (activeMockup && activeMockup.textOverlay) {
+                  return (
+                    <div 
+                      style={{
+                        position: 'absolute',
+                        left: `${activeMockup.textOverlay.x}%`,
+                        top: `${activeMockup.textOverlay.y}%`,
+                        transform: `translate(-50%, -50%) rotate(${activeMockup.textOverlay.rotation || 0}deg)`,
+                        fontFamily: activeMockup.textOverlay.fontFamily,
+                        fontSize: `calc(${activeMockup.textOverlay.fontSize}px * 0.45 + 1vw)`,
+                        color: activeMockup.textOverlay.color,
+                        textAlign: activeMockup.textOverlay.align as any,
+                        fontWeight: 'bold',
+                        lineHeight: 1.15,
+                        whiteSpace: 'pre-line',
+                        pointerEvents: 'none',
+                        zIndex: 2,
+                      }}
+                    >
+                      {activeMockup.textOverlay.text}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
+              {/* Scatter Polaroid Cards */}
+              {cards.map((card) => (
                 <PolaroidCard
                   key={card.id}
                   card={card}
@@ -389,13 +386,13 @@ export const Workspace: React.FC<WorkspaceProps> = ({
                   onSelect={() => onSelectCard(card.id)}
                   onUpdateLayout={(layout) => onUpdateCardLayout(card.id, layout)}
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Tabletop footer instructions */}
-          <div className="flex items-center gap-2 justify-center text-white text-[12px] font-mono font-bold bg-black/40 px-4 py-2 border-2 border-black/10">
-            <Info className="w-4 h-4 text-yellow-300" />
+          <div className="flex items-center gap-2 justify-center text-white text-[10px] md:text-[12px] font-mono font-bold bg-black/40 px-3 py-2 border-2 border-black/10 text-center">
+            <Info className="w-4 h-4 text-yellow-300 shrink-0" />
             <span>DRAG CARDS TO REPOSITION • CLICK CARD TO EDIT • DOUBLE EXPOSURE & TINTS SUPPORTED</span>
           </div>
         </div>
