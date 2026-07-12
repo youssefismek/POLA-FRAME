@@ -1,0 +1,6 @@
+{
+  "name": "Polaroid Photo Filter & Collage Maker",
+  "description": "An interactive web application to transform photos into retro Polaroid-style prints and arrange them in customized scattered collages.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
