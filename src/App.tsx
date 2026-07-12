@@ -15,7 +15,7 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { Workspace } from './components/Workspace';
 import { renderPolaroidToCanvas, renderCollageToCanvas } from './utils/canvasRenderer';
-import { Camera, Image as ImageIcon, Sparkles, Upload } from 'lucide-react';
+import { Camera, Image as ImageIcon, Sparkles, Upload, Sliders, Compass, Type, Layout, X } from 'lucide-react';
 
 // Pre-formated date helper
 function getFormattedCurrentDate() {
@@ -54,6 +54,11 @@ export default function App() {
   const [collageCards, setCollageCards] = useState<PolaroidCardType[]>([]);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  // Mobile Floating Menu States
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeMobileSection, setActiveMobileSection] = useState<string | null>(null);
+  const [isMobileAdjusting, setIsMobileAdjusting] = useState(false);
 
   // Collage canvas default settings
   const [collageSettings, setCollageSettings] = useState<CollageSettings>({
@@ -432,49 +437,93 @@ export default function App() {
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         
         {/* Studio tabletop board */}
-        <div className="h-[46vh] lg:h-full lg:flex-1 flex flex-col min-h-0 border-b-3 lg:border-b-0 lg:border-r-3 border-black">
+        <div className="flex-1 lg:flex-1 h-full flex flex-col min-h-0 lg:border-r-3 border-black">
           
           {/* Quick aesthetic header guide - 90s style */}
           {activeCards.length === 0 && (
-            <div className="p-3 bg-[#c0c0c0] border-b-[3px] border-black text-center animate-fade-in shadow-md flex items-center justify-center gap-2.5">
-              <span className="text-[11px] md:text-xs text-black font-pixel uppercase tracking-widest font-bold">
-                ⚡ Presets / Samples:
-              </span>
-              <select
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (!val) return;
-                  if (val.startsWith('sample-')) {
-                    const idx = parseInt(val.split('-')[1]);
-                    handleLoadSample(idx);
-                  } else if (val.startsWith('mockup-')) {
-                    const id = val.split('mockup-')[1];
-                    handleLoadMockup(id);
-                  }
-                  e.target.value = ""; // Reset after selection
-                }}
-                className="bg-yellow-300 hover:bg-yellow-200 text-[11px] md:text-xs font-black text-black px-3 py-1.5 border-2 border-black brutal-shadow cursor-pointer font-retro outline-none"
-                defaultValue=""
-              >
-                <option value="" disabled>-- Load a Retro Demo --</option>
-                <optgroup label="Sample Camera Photos">
-                  {SAMPLE_PHOTOS.map((sample, idx) => (
-                    <option key={idx} value={`sample-${idx}`}>
-                      📸 {sample.name}
-                    </option>
-                  ))}
-                </optgroup>
-                {mode === 'collage' && (
-                  <optgroup label="Mockup Template Scenes">
-                    {MOCKUP_PRESETS.map((mockup) => (
-                      <option key={mockup.id} value={`mockup-${mockup.id}`}>
-                        🌌 {mockup.name}
+            <>
+              {/* Mobile Header Guide - Dropdown selection */}
+              <div className="lg:hidden p-3 bg-[#c0c0c0] border-b-[3px] border-black text-center animate-fade-in shadow-md flex items-center justify-center gap-2.5">
+                <span className="text-[11px] text-black font-pixel uppercase tracking-widest font-bold">
+                  ⚡ Presets / Samples:
+                </span>
+                <select
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (!val) return;
+                    if (val.startsWith('sample-')) {
+                      const idx = parseInt(val.split('-')[1]);
+                      handleLoadSample(idx);
+                    } else if (val.startsWith('mockup-')) {
+                      const id = val.split('mockup-')[1];
+                      handleLoadMockup(id);
+                    }
+                    e.target.value = ""; // Reset after selection
+                  }}
+                  className="bg-yellow-300 hover:bg-yellow-200 text-[11px] font-black text-black px-3 py-1.5 border-2 border-black brutal-shadow cursor-pointer font-retro outline-none"
+                  defaultValue=""
+                >
+                  <option value="" disabled>-- Load a Retro Demo --</option>
+                  <optgroup label="Sample Camera Photos">
+                    {SAMPLE_PHOTOS.map((sample, idx) => (
+                      <option key={idx} value={`sample-${idx}`}>
+                        📸 {sample.name}
                       </option>
                     ))}
                   </optgroup>
+                  {mode === 'collage' && (
+                    <optgroup label="Mockup Template Scenes">
+                      {MOCKUP_PRESETS.map((mockup) => (
+                        <option key={mockup.id} value={`mockup-${mockup.id}`}>
+                          🌌 {mockup.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
+                </select>
+              </div>
+
+              {/* Desktop Header Guide - Full layout with retro buttons */}
+              <div className="hidden lg:flex flex-col gap-3 p-4 bg-[#c0c0c0] border-b-[3px] border-black text-center animate-fade-in shadow-md">
+                <div>
+                  <p className="text-xs text-black font-pixel uppercase tracking-widest text-[14px] font-bold">
+                    ⚡ Boot the camera with a retro sample photo:
+                  </p>
+                  <div className="flex items-center justify-center gap-2.5 mt-1.5 flex-wrap">
+                    {SAMPLE_PHOTOS.map((sample, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleLoadSample(idx)}
+                        className="px-4 py-1.5 bg-yellow-300 hover:bg-yellow-200 text-xs font-black text-black transition-all cursor-pointer flex items-center gap-1.5 border-2 border-black brutal-shadow"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-black" />
+                        {sample.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {mode === 'collage' && (
+                  <div className="pt-2.5 border-t border-black/10">
+                    <p className="text-xs text-black font-pixel uppercase tracking-widest text-[14px] font-bold">
+                      🌌 Or load a built-in mockup template scene:
+                    </p>
+                    <div className="flex items-center justify-center gap-2.5 mt-1.5 flex-wrap">
+                      {MOCKUP_PRESETS.map((mockup) => (
+                        <button
+                          key={mockup.id}
+                          onClick={() => handleLoadMockup(mockup.id)}
+                          className="px-3 py-1.5 bg-cyan-300 hover:bg-cyan-200 text-[11px] font-black text-black transition-all cursor-pointer flex items-center gap-1.5 border-2 border-black brutal-shadow"
+                        >
+                          <ImageIcon className="w-3.5 h-3.5 text-black" />
+                          {mockup.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 )}
-              </select>
-            </div>
+              </div>
+            </>
           )}
 
           {/* Interactive Workspace */}
@@ -493,8 +542,8 @@ export default function App() {
           />
         </div>
 
-        {/* Settings panel sidebar */}
-        <div className="h-[38vh] lg:h-full w-full lg:w-[380px] shrink-0 min-h-0">
+        {/* Settings panel sidebar (Desktop only) */}
+        <div className="hidden lg:block h-full w-[380px] shrink-0 min-h-0">
           <Sidebar
             mode={mode}
             cards={activeCards}
@@ -511,6 +560,107 @@ export default function App() {
           />
         </div>
       </div>
+
+      {/* Floating settings panel for mobile view */}
+      {activeCards.length > 0 && (
+        <Sidebar
+          mode={mode}
+          cards={activeCards}
+          selectedCardId={selectedCardId}
+          collageSettings={collageSettings}
+          onUpdateCardFilter={handleUpdateCardFilter}
+          onUpdateCardFrame={handleUpdateCardFrame}
+          onUpdateCardLayout={handleUpdateCardLayout}
+          onUpdateCardDoubleExposure={handleUpdateCardDoubleExposure}
+          onUpdateCollageSettings={(updated) => setCollageSettings(prev => ({ ...prev, ...updated }))}
+          onDeleteCard={handleDeleteCard}
+          onLoadMockup={handleLoadMockup}
+          onReplaceCardImage={handleReplaceCardImage}
+          isMobileView={true}
+          activeMobileSection={activeMobileSection}
+          onCloseMobileSection={() => {
+            setActiveMobileSection(null);
+            setIsMobileMenuOpen(false);
+          }}
+          onBackToMenu={() => {
+            setActiveMobileSection(null);
+            setIsMobileMenuOpen(true);
+          }}
+          isAdjusting={isMobileAdjusting}
+          setIsAdjusting={setIsMobileAdjusting}
+        />
+      )}
+
+      {/* Mobile Floating Trigger & Options Stack */}
+      {activeCards.length > 0 && (
+        <div className="lg:hidden">
+          {/* Main Floating Trigger Button at bottom center */}
+          {!isMobileMenuOpen && !activeMobileSection && (
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="fixed bottom-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-black border-3 border-white rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95 transition-all z-40 cursor-pointer animate-bounce"
+              title="Edit Controls"
+            >
+              <Sliders className="w-6 h-6 text-yellow-300" />
+            </button>
+          )}
+
+          {/* Overlay when menu is expanded */}
+          {isMobileMenuOpen && (
+            <div 
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setActiveMobileSection(null);
+              }}
+              className="fixed inset-0 bg-black/50 z-40 transition-opacity animate-fade-in"
+            />
+          )}
+
+          {/* Vertical options stack on the right side of the screen */}
+          {isMobileMenuOpen && (
+            <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3.5 z-50 animate-fade-in">
+              {/* Category selection buttons */}
+              {[
+                { id: 'presets', label: 'Retro Filters', icon: <Sparkles className="w-5 h-5 text-white" /> },
+                { id: 'filters', label: 'Fine-Tune Sliders', icon: <Sliders className="w-5 h-5 text-white" /> },
+                { id: 'frame', label: 'Borders & Paper', icon: <Compass className="w-5 h-5 text-white" /> },
+                { id: 'caption', label: 'Handwritten Cap', icon: <Type className="w-5 h-5 text-white" /> },
+                { id: 'doubleExposure', label: 'Double Blends', icon: <ImageIcon className="w-5 h-5 text-pink-300" /> },
+                ...(mode === 'collage' ? [{ id: 'collage', label: 'Canvas Background', icon: <Layout className="w-5 h-5 text-white" /> }] : []),
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveMobileSection(cat.id);
+                    setIsMobileMenuOpen(false); // Close menu to focus on the settings panel
+                  }}
+                  className="flex items-center gap-3 active:scale-95 transition-transform cursor-pointer group"
+                >
+                  <span className="bg-yellow-300 text-black border-2 border-black font-pixel text-[10px] font-extrabold px-2.5 py-1 uppercase tracking-wider shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {cat.label}
+                  </span>
+                  <div className="w-12 h-12 bg-black border-2 border-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-slate-900">
+                    {cat.icon}
+                  </div>
+                </button>
+              ))}
+
+              {/* Bottom-most close button in the stack (just like reference image) */}
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 active:scale-95 transition-transform cursor-pointer group"
+              >
+                <span className="bg-red-500 text-white border-2 border-black font-pixel text-[10px] font-extrabold px-2.5 py-1 uppercase tracking-wider shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  Close
+                </span>
+                <div className="w-12 h-12 bg-red-600 border-2 border-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-red-500">
+                  <X className="w-5 h-5 text-white" />
+                </div>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
