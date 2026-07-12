@@ -54,6 +54,7 @@ export default function App() {
   const [collageCards, setCollageCards] = useState<PolaroidCardType[]>([]);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [exportedImage, setExportedImage] = useState<{ url: string; filename: string } | null>(null);
 
   // Mobile Floating Menu States
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -400,12 +401,36 @@ export default function App() {
         filename = `polaroid-pack-${Date.now()}.png`;
       }
 
-      // Download
       const dataUrl = canvas.toDataURL('image/png');
+
+      // Try file sharing via Web Share API if supported
+      let shared = false;
+      if (navigator.share && navigator.canShare) {
+        try {
+          const response = await fetch(dataUrl);
+          const blob = await response.blob();
+          const file = new File([blob], filename, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Retro Polaroid Photo',
+              text: 'Look at my retro photo! Created with Polaroid Studio.',
+            });
+            shared = true;
+          }
+        } catch (shareErr) {
+          console.log('Web Share cancelled or not supported for files:', shareErr);
+        }
+      }
+
+      // Trigger traditional download click
       const link = document.createElement('a');
       link.download = filename;
       link.href = dataUrl;
       link.click();
+
+      // Show the helper modal so users on mobile can easily save/share via long-press
+      setExportedImage({ url: dataUrl, filename });
     } catch (e) {
       console.error('HD Render failed:', e);
       alert('An error occurred during high-definition photo rendering. Please try again with a different image.');
@@ -659,6 +684,75 @@ export default function App() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* 90s Retro Download/Share Modal for Mobile & Fallback support */}
+      {exportedImage && (
+        <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+          <div className="bg-[#c0c0c0] border-[3px] border-black max-w-[400px] w-full p-1 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col z-50">
+            
+            {/* Title Bar */}
+            <div className="bg-[#000080] text-white px-2 py-1 flex items-center justify-between font-retro text-[12px] font-extrabold uppercase select-none">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-yellow-300" />
+                <span>SAVE_IMAGE.EXE</span>
+              </div>
+              <button 
+                onClick={() => setExportedImage(null)}
+                className="bg-[#c0c0c0] text-black border border-black hover:bg-red-500 hover:text-white font-pixel text-[11px] px-1.5 py-0.5 cursor-pointer leading-none font-black"
+              >
+                X
+              </button>
+            </div>
+
+            {/* Modal Content Body */}
+            <div className="p-3 bg-[#dfdfdf] border border-white/40 mt-1 space-y-4 text-center">
+              <div className="space-y-1">
+                <h3 className="font-pixel text-xs font-bold uppercase text-black">
+                  📷 HD Polaroid Exported!
+                </h3>
+                <div className="bg-[#fff] border-2 border-black p-2 text-left space-y-1.5">
+                  <p className="text-[11px] text-slate-800 leading-normal font-sans">
+                    📱 <strong className="font-bold">On Mobile:</strong> Press & hold (long tap) on the photo below, then tap <strong className="font-bold">"Save to Photos"</strong> or <strong className="font-bold">"Share"</strong>.
+                  </p>
+                  <p className="text-[11px] text-slate-800 leading-normal font-sans">
+                    💻 <strong className="font-bold">On Desktop:</strong> Right-click and choose <strong className="font-bold">"Save Image As..."</strong>, or click the download button below.
+                  </p>
+                </div>
+              </div>
+
+              {/* The Generated Image */}
+              <div className="relative flex items-center justify-center bg-white border-2 border-black p-2 shadow-inner">
+                <img 
+                  src={exportedImage.url} 
+                  alt="Your Retro Polaroid" 
+                  referrerPolicy="no-referrer"
+                  className="max-h-[260px] max-w-full object-contain pointer-events-auto border border-black/10 select-all"
+                  style={{ WebkitTouchCallout: 'default' }}
+                />
+              </div>
+
+              {/* Modal Footer Controls */}
+              <div className="flex items-center justify-center gap-2.5 pt-1.5">
+                <a
+                  href={exportedImage.url}
+                  download={exportedImage.filename}
+                  className="px-4 py-1.5 bg-yellow-300 hover:bg-yellow-200 text-black border-2 border-black font-pixel text-[11px] font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 flex items-center gap-1.5"
+                >
+                  <Upload className="w-3.5 h-3.5 rotate-180 text-black" />
+                  <span>Download File</span>
+                </a>
+                
+                <button
+                  onClick={() => setExportedImage(null)}
+                  className="px-5 py-1.5 bg-[#c0c0c0] hover:bg-[#d5d5d5] text-black border-2 border-black font-pixel text-[11px] font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
