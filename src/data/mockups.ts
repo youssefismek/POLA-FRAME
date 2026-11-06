@@ -40,7 +40,7 @@ export const MOCKUP_PRESETS: MockupPreset[] = [
   {
     id: 'jeans-pocket',
     name: 'Jeans Pocket Flatlay',
-    description: 'Four cozy Polaroids tucked into vintage denim pocket seams',
+    description: 'Four cozy instant prints tucked into vintage denim pocket seams',
     thumbnail: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=150&auto=format&fit=crop',
     backgroundType: 'image',
     backgroundColor: '#008080',
@@ -121,7 +121,7 @@ export const MOCKUP_PRESETS: MockupPreset[] = [
   },
   {
     id: 'polaroid-stack',
-    name: 'Chaotic Polaroid Pile',
+    name: 'Chaotic Photo Pile',
     description: 'A nostalgic scatter with faded B&W snapshots behind one bright photo',
     thumbnail: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=150&auto=format&fit=crop',
     backgroundType: 'texture',
@@ -233,7 +233,7 @@ export const MOCKUP_PRESETS: MockupPreset[] = [
       }
     ],
     textOverlay: {
-      text: 'SUPER PROMO\nPolaroid mini pocket',
+      text: 'SUPER PROMO\nmini pocket prints',
       x: 50,
       y: 20,
       fontFamily: 'Caveat',
@@ -246,7 +246,7 @@ export const MOCKUP_PRESETS: MockupPreset[] = [
   {
     id: 'analog-camera',
     name: 'Analog Life Camera',
-    description: 'A flatlay of a classic Polaroid camera ejecting your picture',
+    description: 'A flatlay of a classic instant camera ejecting your picture',
     thumbnail: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=150&auto=format&fit=crop',
     backgroundType: 'image',
     backgroundColor: '#ffffff',

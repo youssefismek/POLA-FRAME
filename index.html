@@ -1,13 +1,366 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>POLA Frame</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>POLA Frame – Free Retro Instant Photo Frame Maker Online</title>
+  <meta name="description" content="Turn any photo into a retro instant print. Vintage film filters, paper frames, handwritten captions and collage boards. Free, no sign-up, and your photos never leave your device." />
+  <link rel="canonical" href="https://pola-frame.vercel.app/" />
+  <meta name="theme-color" content="#008080" />
+  <meta name="color-scheme" content="light" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+  <!-- Open Graph (Facebook, Pinterest, WhatsApp, iMessage) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="POLA Frame" />
+  <meta property="og:title" content="POLA Frame – Turn Any Photo Into a Retro Instant Print" />
+  <meta property="og:description" content="Vintage film filters, paper frames and handwritten captions. Free, in your browser, no sign-up." />
+  <meta property="og:url" content="https://pola-frame.vercel.app/" />
+  <meta property="og:image" content="https://pola-frame.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Three retro instant photo prints with handwritten captions" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- Pinterest: after claiming your site, paste your verification tag here -->
+  <!-- <meta name="p:domain_verify" content="YOUR_CODE" /> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&family=VT323&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "POLA Frame",
+        "url": "https://pola-frame.vercel.app/",
+        "applicationCategory": "PhotographyApplication",
+        "operatingSystem": "Any (web browser)",
+        "description": "Free online tool that turns photos into retro instant prints with vintage filters, paper frames and handwritten captions.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is POLA Frame free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can edit and download your prints for free, with no account." } },
+          { "@type": "Question", "name": "Are my photos uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Everything happens in your browser, so your photos stay on your device." } },
+          { "@type": "Question", "name": "Does it work on my phone?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. POLA Frame works in mobile browsers on iPhone and Android, with no app to install." } },
+          { "@type": "Question", "name": "What can I use the prints for?", "acceptedAnswer": { "@type": "Answer", "text": "Instagram and Pinterest posts, scrapbooks, birthday and wedding cards, mood boards, or printing them at home." } },
+          { "@type": "Question", "name": "Which photo formats can I use?", "acceptedAnswer": { "@type": "Answer", "text": "JPG, PNG and WebP images. Downloads are high-resolution PNG files." } }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --teal: #008080;
+      --teal-dark: #006666;
+      --yellow: #fde047;
+      --pink: #ff00a0;
+      --cyan: #67e8f9;
+      --paper: #faf9f6;
+      --cream: #f4ebd0;
+      --ink: #111111;
+      --grey: #dfdfdf;
+      --muted: #4b5563;
+      --shadow: 4px 4px 0 var(--ink);
+      --shadow-lg: 7px 7px 0 var(--ink);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--grey);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; }
+    .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 52px; padding: 14px 26px;
+      font: 700 15px/1 "Space Grotesk", sans-serif; letter-spacing: .06em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); background: var(--yellow);
+      border: 3px solid var(--ink); box-shadow: var(--shadow);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+    .btn:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+    .btn--pink { background: var(--pink); color: #fff; }
+    .btn--small { min-height: 42px; padding: 10px 16px; font-size: 13px; }
+
+    /* Header */
+    .site-header { background: var(--grey); border-bottom: 3px solid var(--ink); position: sticky; top: 0; z-index: 10; }
+    .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; }
+    .logo { display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .logo span {
+      font-family: "Rubik Mono One", sans-serif; font-size: 13px; letter-spacing: .12em;
+      padding: 4px 12px; border: 2px solid var(--ink);
+    }
+    .logo span:first-child { background: var(--yellow); transform: rotate(-2deg); box-shadow: 3px 3px 0 var(--pink); }
+    .logo span:last-child { background: var(--cyan); transform: rotate(3deg); box-shadow: 3px 3px 0 var(--ink); }
+    .nav { display: flex; align-items: center; gap: 22px; }
+    .nav a.link { font-weight: 500; font-size: 15px; text-decoration: none; }
+    .nav a.link:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+    @media (max-width: 720px) { .nav a.link { display: none; } }
+
+    /* Hero */
+    .hero {
+      background-color: var(--teal);
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+      border-bottom: 3px solid var(--ink);
+      overflow: hidden;
+    }
+    .hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; padding-top: 64px; padding-bottom: 72px; }
+    .tag {
+      display: inline-block; font-family: "VT323", monospace; font-size: 20px; letter-spacing: .08em;
+      background: var(--ink); color: var(--yellow); padding: 2px 10px; margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0 0 18px; color: #fff;
+      font-family: "Rubik Mono One", sans-serif; font-weight: 400;
+      font-size: clamp(30px, 5.2vw, 54px); line-height: 1.08; letter-spacing: -.01em;
+      text-shadow: 4px 4px 0 var(--ink);
+    }
+    .hero h1 em { font-style: normal; color: var(--yellow); }
+    .hero p.lead { color: #f0fdfa; font-size: clamp(17px, 2vw, 20px); max-width: 34em; margin: 0 0 28px; }
+    .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+    .trust { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 26px 0 0; padding: 0; list-style: none; color: #fff; font-size: 15px; font-weight: 500; }
+    .trust li::before { content: "✓ "; color: var(--yellow); font-weight: 700; }
+
+    /* Instant prints (pure CSS) */
+    .prints { position: relative; height: 500px; }
+    .print {
+      position: absolute; width: 230px; padding: 12px 12px 0;
+      background: var(--paper); border: 3px solid var(--ink); box-shadow: var(--shadow-lg);
+    }
+    .print .photo { aspect-ratio: 1 / 1; border: 2px solid var(--ink); position: relative; overflow: hidden; }
+    .print .cap { font-family: "Caveat", cursive; font-size: 26px; text-align: center; padding: 8px 4px 12px; line-height: 1.1; }
+    .print .date { position: absolute; right: 18px; bottom: 6px; font-family: "VT323", monospace; font-size: 13px; color: #9ca3af; }
+    .p1 { left: 2%; top: 40px; transform: rotate(-8deg); background: var(--cream); }
+    .p2 { left: 28%; top: 0; transform: rotate(4deg); z-index: 3; }
+    .p3 { right: 0; top: 215px; transform: rotate(-3deg); z-index: 2; }
+    .scene-sunset { background: linear-gradient(180deg, #ff9a5a 0%, #ff5e7e 45%, #6a3d9a 46%, #2b6f8f 100%); filter: saturate(.85) sepia(.15); }
+    .scene-sunset::after { content: ""; position: absolute; left: 50%; top: 22%; width: 34%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: #ffe08a; box-shadow: 0 0 30px #ffd166; }
+    .scene-cafe { background: radial-gradient(circle at 50% 58%, #6b3e26 0 18%, #f5e6d3 18.5% 26%, transparent 26.5%), linear-gradient(160deg, #c49a6c, #8b5a3c); filter: sepia(.25); }
+    .scene-bw { background: radial-gradient(circle at 30% 70%, #9a9a9a 0 22%, transparent 22.5%), radial-gradient(circle at 75% 35%, #e5e5e5 0 14%, transparent 14.5%), linear-gradient(200deg, #3a3a3a, #bdbdbd); }
+    .grain::before { content: ""; position: absolute; inset: 0; z-index: 1; opacity: .18; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .vignette::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 50px rgba(0,0,0,.45); }
+    .sticker {
+      position: absolute; z-index: 4; left: 12%; bottom: 10px; transform: rotate(-6deg);
+      background: var(--pink); color: #fff; border: 3px solid var(--ink); box-shadow: var(--shadow);
+      font-family: "VT323", monospace; font-size: 22px; padding: 4px 12px; letter-spacing: .05em;
+    }
+
+    @media (max-width: 880px) {
+      .hero .wrap { grid-template-columns: 1fr; padding-top: 40px; padding-bottom: 48px; gap: 24px; }
+      .prints { height: 370px; max-width: 420px; width: 100%; margin: 0 auto; }
+      .print { width: 170px; padding: 9px 9px 0; }
+      .print .cap { font-size: 20px; }
+      .p3 { top: 165px; }
+      .sticker { font-size: 18px; }
+    }
+    @media (max-width: 380px) {
+      .prints { height: 330px; }
+      .p3 { top: 145px; }
+      .print { width: 145px; }
+    }
+
+    /* Sections */
+    section { padding: 72px 0; border-bottom: 3px solid var(--ink); }
+    .section-title {
+      font-family: "Rubik Mono One", sans-serif; font-weight: 400;
+      font-size: clamp(22px, 3.4vw, 34px); line-height: 1.15; margin: 0 0 12px;
+    }
+    .section-sub { color: var(--muted); font-size: 18px; max-width: 40em; margin: 0 0 40px; }
+
+    /* Steps */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+    .step { background: #fff; border: 3px solid var(--ink); box-shadow: var(--shadow); padding: 26px 22px; position: relative; }
+    .step::before {
+      counter-increment: step; content: counter(step);
+      display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 16px;
+      font-family: "Rubik Mono One", sans-serif; font-size: 18px; background: var(--yellow); border: 3px solid var(--ink);
+    }
+    .step:nth-child(2)::before { background: var(--cyan); }
+    .step:nth-child(3)::before { background: var(--pink); color: #fff; }
+    .step h3 { margin: 0 0 6px; font-size: 20px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    /* Features */
+    .features { background: var(--paper); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .card { background: #fff; border: 3px solid var(--ink); padding: 22px; box-shadow: var(--shadow); }
+    .card .icon { width: 44px; height: 44px; display: grid; place-items: center; border: 2px solid var(--ink); margin-bottom: 14px; font-size: 22px; }
+    .card h3 { margin: 0 0 6px; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); }
+
+    /* Swatches */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+    .chip { font-family: "VT323", monospace; font-size: 20px; padding: 4px 12px; border: 2px solid var(--ink); background: #fff; }
+
+    /* Ideas */
+    .ideas { background: var(--yellow); }
+    .ideas ul { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 32px; list-style: none; margin: 0; padding: 0; }
+    .ideas li { font-size: 18px; font-weight: 500; padding-left: 34px; position: relative; }
+    .ideas li::before { content: "★"; position: absolute; left: 0; top: -1px; font-size: 22px; color: var(--pink); -webkit-text-stroke: 1px var(--ink); }
+
+    /* FAQ */
+    .faq details { background: #fff; border: 3px solid var(--ink); box-shadow: var(--shadow); margin-bottom: 14px; }
+    .faq summary { cursor: pointer; list-style: none; padding: 18px 52px 18px 20px; font-weight: 700; font-size: 18px; position: relative; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: "Rubik Mono One", sans-serif; font-size: 20px; }
+    .faq details[open] summary::after { content: "–"; }
+    .faq summary:focus-visible { outline: 3px solid var(--pink); outline-offset: -3px; }
+    .faq details p { margin: 0; padding: 0 20px 18px; color: var(--muted); }
+
+    /* Final CTA */
+    .final { background: var(--pink); text-align: center; color: #fff; }
+    .final .section-title { color: #fff; text-shadow: 3px 3px 0 var(--ink); }
+    .final p { font-size: 18px; margin: 0 auto 28px; max-width: 32em; }
+    .final .btn { background: var(--yellow); color: var(--ink); }
+
+    footer { background: var(--ink); color: #d1d5db; padding: 32px 0; font-size: 14px; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+    footer a { color: #fff; }
+
+    @media (max-width: 880px) {
+      section { padding: 52px 0; }
+      .steps, .grid { grid-template-columns: 1fr; }
+      .ideas ul { grid-template-columns: 1fr; }
+      .hero-cta .btn { width: 100%; }
+    }
+    @media (min-width: 560px) and (max-width: 880px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="/" aria-label="POLA Frame home"><span>Pola</span><span>Frame</span></a>
+      <nav class="nav" aria-label="Main">
+        <a class="link" href="#how">How it works</a>
+        <a class="link" href="#features">Features</a>
+        <a class="link" href="#faq">FAQ</a>
+        <a class="btn btn--small" href="/editor/">Open editor</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <div>
+          <span class="tag">FREE • NO SIGN-UP • 90s VIBES</span>
+          <h1>Turn any photo into a <em>retro instant print</em></h1>
+          <p class="lead">Add vintage film filters, a paper frame and a handwritten caption, then download your print in HD. It takes about 30 seconds and works right in your browser.</p>
+          <div class="hero-cta">
+            <a class="btn btn--pink" href="/editor/">Make your print →</a>
+          </div>
+          <ul class="trust">
+            <li>100% free</li>
+            <li>Photos never leave your device</li>
+            <li>Works on phone &amp; desktop</li>
+          </ul>
+        </div>
+
+        <div class="prints" aria-hidden="true">
+          <div class="print p1"><div class="photo scene-cafe grain vignette"></div><div class="cap">coffee dates ☕</div></div>
+          <div class="print p2"><div class="photo scene-sunset grain"></div><div class="cap">chasing sunsets</div></div>
+          <div class="print p3"><div class="photo scene-bw grain vignette"></div><div class="cap">best friends</div></div>
+          <div class="sticker">HD DOWNLOAD!</div>
+        </div>
+      </div>
+    </div>
+
+    <section id="how">
+      <div class="wrap">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Three steps, no learning curve.</p>
+        <ol class="steps">
+          <li class="step"><h3>Add your photo</h3><p>Pick a photo from your phone or computer. JPG, PNG and WebP all work.</p></li>
+          <li class="step"><h3>Pick your look</h3><p>Choose a film filter and paper, then write a caption in handwriting-style fonts.</p></li>
+          <li class="step"><h3>Download in HD</h3><p>Save a high-resolution PNG, ready to post, share or print.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="wrap">
+        <h2 class="section-title">Everything for the perfect print</h2>
+        <p class="section-sub">The analog look without the film, the camera, or the waiting.</p>
+        <div class="grid">
+          <div class="card"><div class="icon" style="background:var(--yellow)">🎞️</div><h3>Vintage film filters</h3><p>Warm '70s tones, faded matte, black &amp; white film, light leaks, grain and vignette.</p></div>
+          <div class="card"><div class="icon" style="background:var(--cyan)">✍️</div><h3>Handwritten captions</h3><p>7 handwriting fonts with ink color, size and slant, so it looks written by hand.</p></div>
+          <div class="card"><div class="icon" style="background:#fbcfe8">📜</div><h3>Paper frames</h3><p>Classic white, aged paper, cream, charcoal, kraft and pastel cards.</p></div>
+          <div class="card"><div class="icon" style="background:#bbf7d0">🖼️</div><h3>Collage boards</h3><p>Scatter several prints on a background for mood boards and memory walls.</p></div>
+          <div class="card"><div class="icon" style="background:#fed7aa">🌗</div><h3>Double exposure</h3><p>Blend two photos into one dreamy, film-style shot.</p></div>
+          <div class="card"><div class="icon" style="background:#ddd6fe">📅</div><h3>Retro date stamp</h3><p>Add a small date in the corner of the frame, like a print from an old photo album.</p></div>
+        </div>
+        <div class="chips" aria-label="Filter looks">
+          <span class="chip">INSTANT '70s</span><span class="chip">MATTE CREAM</span><span class="chip">RETRO FLASH</span>
+          <span class="chip">GOLDEN HOUR</span><span class="chip">B&amp;W FILM</span><span class="chip">COLD INDIGO</span><span class="chip">SPECTRUM</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="ideas">
+      <div class="wrap">
+        <h2 class="section-title">What will you make?</h2>
+        <p class="section-sub" style="color:#3f3f46">People use POLA Frame for:</p>
+        <ul>
+          <li>Instagram &amp; Pinterest posts</li>
+          <li>Scrapbook and journal pages</li>
+          <li>Birthday and anniversary cards</li>
+          <li>Wedding and party photo walls</li>
+          <li>Aesthetic mood boards</li>
+          <li>Prints for your room or fridge</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="wrap">
+        <h2 class="section-title">FAQ</h2>
+        <p class="section-sub">Quick answers before you start.</p>
+        <details><summary>Is POLA Frame free?</summary><p>Yes. You can edit and download your prints for free, with no account.</p></details>
+        <details><summary>Are my photos uploaded to a server?</summary><p>No. Everything happens in your browser, so your photos stay on your device.</p></details>
+        <details><summary>Does it work on my phone?</summary><p>Yes. POLA Frame works in mobile browsers on iPhone and Android, with no app to install.</p></details>
+        <details><summary>What can I use the prints for?</summary><p>Instagram and Pinterest posts, scrapbooks, birthday and wedding cards, mood boards, or printing them at home.</p></details>
+        <details><summary>Which photo formats can I use?</summary><p>JPG, PNG and WebP images. Downloads are high-resolution PNG files.</p></details>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <h2 class="section-title">Ready for your first print?</h2>
+        <p>Pick a photo and see it turn retro in seconds.</p>
+        <a class="btn" href="/editor/">Open the editor →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 POLA Frame. Made for photo lovers.</span>
+      <span><a href="/editor/">Editor</a></span>
+    </div>
+  </footer>
+</body>
+</html>

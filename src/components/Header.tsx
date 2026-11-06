@@ -23,14 +23,14 @@ export const Header: React.FC<HeaderProps> = ({
       
       {/* Brand Logo & Slogan (90s Retro Stickers) */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5">
+        <a href="/" aria-label="POLA Frame home" className="flex items-center gap-1.5">
           <div className="px-3.5 py-1 bg-yellow-300 border-2 border-black font-retro text-[13px] text-black tracking-widest brutal-shadow-pink uppercase rotate-[-2deg] select-none">
             Pola
           </div>
           <div className="px-3.5 py-1 bg-cyan-300 border-2 border-black font-retro text-[13px] text-black tracking-widest brutal-shadow uppercase rotate-[3deg] select-none">
             Frame
           </div>
-        </div>
+        </a>
         <div className="flex flex-col justify-center pl-1 border-l-2 border-black/20 h-8">
           <p className="font-pixel text-[15px] leading-none text-slate-800 tracking-widest uppercase">90s Retro Studio</p>
           <p className="text-[9px] text-slate-500 tracking-wider uppercase font-mono mt-0.5">EST. 1995</p>

@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# POLA Frame
 
-# Run and deploy your AI Studio app
+Free web app that turns photos into retro instant prints: vintage film filters, paper frames, handwritten captions, collage boards and HD export. Everything runs in the browser, so photos never leave the user's device.
 
-This contains everything you need to run your app locally.
+## Pages
 
-View your app in AI Studio: https://ai.studio/apps/0a0cb31e-0a45-4a7c-b612-44f3cf1c475d
+| URL | File | What it is |
+| --- | --- | --- |
+| `/` | `index.html` | Static landing page (plain HTML + CSS, no JavaScript) for search engines and Pinterest |
+| `/editor/` | `editor/index.html` → `src/` | The React photo editor |
 
-## Run Locally
+## Run locally
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev        # http://localhost:3000 (landing) and http://localhost:3000/editor/
+npm run build      # outputs to dist/
+npm run lint       # type-check
+```
 
+## Deploy
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Deployed on Vercel. `vercel.json` adds trailing slashes (`/editor` → `/editor/`) and long cache headers for built assets.
+
+## Before launch on a custom domain
+
+Replace `https://pola-frame.vercel.app` with your domain in:
+
+- `index.html` and `editor/index.html` (canonical and `og:` tags)
+- `public/robots.txt` and `public/sitemap.xml`
+
+Then claim the domain in Pinterest (Settings → Claimed accounts) and paste the `p:domain_verify` tag into `index.html`.
