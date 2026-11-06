@@ -193,7 +193,7 @@ export const GOOGLE_HANDWRITING_FONTS = [
 ];
 
 export const FRAME_STYLES: { id: FrameStyle; name: string; bgClass: string; textClass: string }[] = [
-  { id: 'classic', name: 'Classic Polaroid White', bgClass: 'bg-[#faf9f6]', textClass: 'text-slate-800' },
+  { id: 'classic', name: 'Classic White', bgClass: 'bg-[#faf9f6]', textClass: 'text-slate-800' },
   { id: 'vintage', name: 'Aged Paper Vintage', bgClass: 'bg-[#f4ebd0]', textClass: 'text-stone-800' },
   { id: 'cream', name: 'Warm Cream', bgClass: 'bg-[#fdfaf2]', textClass: 'text-amber-950' },
   { id: 'charcoal', name: 'Dark Charcoal', bgClass: 'bg-[#22252a]', textClass: 'text-neutral-200' },
