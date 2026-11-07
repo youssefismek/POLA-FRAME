@@ -25,6 +25,8 @@
   <!-- Pinterest: after claiming your site, paste your verification tag here -->
   <!-- <meta name="p:domain_verify" content="YOUR_CODE" /> -->
 
+  <link rel="preload" as="image" href="/hero/mat.webp" media="(min-width: 1001px)" />
+  <link rel="preload" as="image" href="/hero/paper.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&family=VT323&display=swap" rel="stylesheet" />
@@ -116,123 +118,81 @@
     .nav a.link:hover { text-decoration: underline; text-decoration-thickness: 2px; }
     @media (max-width: 720px) { .nav a.link { display: none; } }
 
-    /* Hero: top-down view of a green cutting mat with desk objects */
+    /* Hero: top-down cutting mat scene. Objects are cut-out photos in /hero/;
+       all shadows are added here so they share one light source (top left). */
     .hero {
-      --mat: #2c7355;
       position: relative; overflow: hidden;
-      background-color: var(--mat);
-      background-image:
-        radial-gradient(ellipse at 70% 20%, rgba(255,255,255,.10), transparent 60%),
-        linear-gradient(rgba(255,255,255,.34) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.34) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px);
-      background-size: 100% 100%, 48px 48px, 48px 48px, 24px 24px, 24px 24px;
+      background: #2c6e52 url("/hero/mat.webp") center / cover no-repeat;
       border-bottom: 3px solid var(--ink);
     }
-    .mat-ruler { position: absolute; z-index: 1; pointer-events: none; }
-    .mat-ruler text { fill: rgba(255,255,255,.75); font: 13px "VT323", monospace; text-anchor: middle; }
-    .mat-ruler path { stroke: rgba(255,255,255,.6); stroke-width: 1; }
-    .mat-ruler--top { top: 0; left: 0; }
-    .mat-ruler--left { top: 0; left: 0; }
-    .mat-guides, .leaf-shadow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-    .mat-guides { z-index: 0; }
-    .leaf-shadow { z-index: 1; opacity: .22; mix-blend-mode: multiply; }
+    .scene { position: relative; width: 100%; aspect-ratio: 1672 / 941; margin: 0 auto; container-type: inline-size; }
+    .leaf-shadow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 8; opacity: .30; mix-blend-mode: multiply; }
 
-    .hero .wrap { position: relative; z-index: 2; display: grid; grid-template-columns: 1.08fr .92fr; gap: 40px; align-items: center; padding-top: 64px; padding-bottom: 64px; }
+    .it { position: absolute; }
+    .it img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+    .lift-print { filter: drop-shadow(1px 2px 1.5px rgba(0,0,0,.35)) drop-shadow(6px 12px 12px rgba(0,0,0,.28)); }
+    .lift-low   { filter: drop-shadow(2px 3px 2px rgba(0,0,0,.42)) drop-shadow(5px 9px 9px rgba(0,0,0,.2)); }
+    .lift-flat  { filter: drop-shadow(1px 2px 1.5px rgba(0,0,0,.4)); }
+    .lift-high  { filter: drop-shadow(3px 6px 4px rgba(0,0,0,.45)) drop-shadow(10px 20px 18px rgba(0,0,0,.3)); }
 
-    /* Paper note holding the headline */
-    .note {
-      position: relative; background: #fbf8ef; padding: 36px 34px 32px;
-      transform: rotate(-1.2deg);
-      box-shadow: 0 1px 0 rgba(0,0,0,.06), 4px 14px 24px rgba(0,0,0,.35);
+    /* Positions match the reference layout (percent of the scene) */
+    .i-coffee  { left: 51.6%; top: 11.6%; width: 18.6%; z-index: 3; }
+    .i-sunsets { left: 66.2%; top: 7.4%;  width: 17.6%; z-index: 4; } .i-sunsets img { transform: rotate(4deg); }
+    .i-friends { left: 73.2%; top: 38.6%; width: 17.6%; z-index: 3; } .i-friends img { transform: rotate(4deg); }
+    .i-clip-s  { left: 86.2%; top: 19.3%; width: 3.3%;  z-index: 2; }
+    .i-clip-p  { left: 68.9%; top: 56.5%; width: 3%;    z-index: 4; } .i-clip-p img { transform: rotate(-40deg); }
+    .i-label   { left: 54.2%; top: 60.1%; width: 12.6%; z-index: 4; } .i-label img { transform: rotate(-4deg); }
+    .i-pencil  { left: 47.6%; top: 62.6%; width: 21.5%; z-index: 6; } .i-pencil img { transform: rotate(11deg); }
+    .i-eraser  { left: 66.3%; top: 73.5%; width: 6.5%;  z-index: 5; } .i-eraser img { transform: rotate(60deg); }
+    .i-ruler   { left: 58.3%; top: 81.5%; width: 40%;   z-index: 2; } .i-ruler img { transform: rotate(-14deg); }
+    .i-camera  { left: -1.8%; top: 82%;   width: 15.5%; z-index: 6; } .i-camera img { transform: rotate(22deg); }
+
+    /* Torn paper note: 9-slice so the tape and torn edges keep their shape */
+    .paper {
+      position: absolute; left: 7.5%; top: 7.2%; width: 44.9%; height: 79.4%; z-index: 2;
+      border-style: solid; border-color: transparent;
+      border-width: 6.25cqw 7.6cqw 3.6cqw;
+      border-image: url("/hero/paper.webp") 14% 22% 8% fill / 6.25cqw 7.6cqw 3.6cqw stretch;
+      filter: drop-shadow(1px 2px 1.5px rgba(0,0,0,.3)) drop-shadow(6px 12px 14px rgba(0,0,0,.28));
     }
-    .note::before { content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: repeating-linear-gradient(transparent 0 31px, rgba(37,99,235,.08) 31px 32px); }
-    .note > * { position: relative; }
-    .tag {
-      display: inline-block; font-family: "VT323", monospace; font-size: 20px; letter-spacing: .08em;
-      background: var(--ink); color: var(--yellow); padding: 2px 10px; margin-bottom: 18px;
-    }
+    .paper-lines { position: absolute; left: -4.4cqw; right: -5.6cqw; top: -1.2cqw; bottom: -1cqw; pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent 2.6cqw, rgba(220,38,38,.35) 2.6cqw, rgba(220,38,38,.35) calc(2.6cqw + 1px), transparent calc(2.6cqw + 1px)),
+        repeating-linear-gradient(transparent 0 2.05cqw, rgba(30,64,175,.08) 2.05cqw calc(2.05cqw + 1px));
+      mix-blend-mode: multiply; }
+    .paper-text { position: absolute; left: -1.2cqw; right: -2.6cqw; top: 2.1cqw; }
     .hero h1 {
-      margin: 0 0 18px; color: var(--ink);
+      margin: 0 0 2.2cqw; color: var(--ink);
       font-family: "Rubik Mono One", sans-serif; font-weight: 400;
-      font-size: clamp(28px, 3.6vw, 42px); line-height: 1.12; letter-spacing: -.01em;
+      font-size: 2.62cqw; line-height: 1.2; letter-spacing: -.01em;
     }
-    .hero h1 em { font-style: normal; background: linear-gradient(transparent 52%, var(--yellow) 52%, var(--yellow) 92%, transparent 92%); padding: 0 .08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-    .hero p.lead { color: #374151; font-size: clamp(16px, 1.8vw, 19px); max-width: 32em; margin: 0 0 26px; }
-    .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
-    .trust { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 22px 0 0; padding: 0; list-style: none; color: #1f2937; font-size: 15px; font-weight: 500; }
-    .trust li::before { content: "✓ "; color: var(--pink); font-weight: 700; }
+    .hero h1 em { font-style: normal; background: linear-gradient(transparent 48%, var(--yellow) 48%, var(--yellow) 94%, transparent 94%); padding: 0 .08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    .hero p.lead { color: #1f2328; font-size: 1.48cqw; line-height: 1.4; margin: 0 0 2.6cqw; max-width: 33cqw; }
+    .hero .btn { font-size: 1.45cqw; min-height: 0; padding: 1.5cqw 2.6cqw; border-width: .2cqw; box-shadow: .35cqw .35cqw 0 var(--ink); }
 
-    /* Washi / masking tape */
-    .tape {
-      position: absolute; z-index: 3; width: 96px; height: 28px;
-      background: repeating-linear-gradient(45deg, rgba(253,224,71,.85) 0 8px, rgba(254,240,138,.85) 8px 16px);
-      clip-path: polygon(0 8%, 6% 0, 12% 10%, 18% 0, 24% 6%, 100% 0, 96% 50%, 100% 100%, 94% 92%, 88% 100%, 80% 94%, 0 100%, 4% 50%);
-      box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    }
-    .tape--pink { background: repeating-linear-gradient(90deg, rgba(255,105,180,.78) 0 6px, rgba(255,182,213,.78) 6px 12px); }
-    .tape--cream { background: rgba(240,230,205,.88); }
-    .note .tape--tl { top: -12px; left: -18px; transform: rotate(-32deg); }
-    .note .tape--tr { top: -12px; right: -18px; transform: rotate(28deg); }
-
-    /* Desk area: prints and objects */
-    .desk { position: relative; height: 520px; }
-    .print {
-      position: absolute; width: 230px; padding: 12px 12px 0; background: var(--paper);
-      box-shadow: 0 1px 1px rgba(0,0,0,.12), 5px 12px 18px rgba(0,0,0,.38);
-    }
-    .print .photo { aspect-ratio: 1 / 1; position: relative; overflow: hidden; }
-    .print .cap { font-family: "Caveat", cursive; font-size: 26px; text-align: center; padding: 8px 4px 14px; line-height: 1.1; color: #1f2937; }
-    .print .tape { top: -13px; left: 50%; margin-left: -48px; }
-    .p1 { left: 0; top: 50px; transform: rotate(-8deg); background: var(--cream); z-index: 2; }
-    .p2 { left: 31%; top: 0; transform: rotate(4deg); z-index: 4; }
-    .p3 { right: 2%; top: 220px; transform: rotate(-3deg); z-index: 3; }
-    .p2 .tape { transform: rotate(-4deg); }
-    .p3 .tape { transform: rotate(6deg); }
-    .scene-sunset { background: linear-gradient(180deg, #ff9a5a 0%, #ff5e7e 45%, #6a3d9a 46%, #2b6f8f 100%); filter: saturate(.85) sepia(.15); }
-    .scene-sunset::after { content: ""; position: absolute; left: 50%; top: 22%; width: 34%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: #ffe08a; box-shadow: 0 0 30px #ffd166; }
-    .scene-cafe { background: radial-gradient(circle at 50% 58%, #6b3e26 0 18%, #f5e6d3 18.5% 26%, transparent 26.5%), linear-gradient(160deg, #c49a6c, #8b5a3c); filter: sepia(.25); }
-    .scene-bw { background: radial-gradient(circle at 30% 70%, #9a9a9a 0 22%, transparent 22.5%), radial-gradient(circle at 75% 35%, #e5e5e5 0 14%, transparent 14.5%), linear-gradient(200deg, #3a3a3a, #bdbdbd); }
-    .grain::before { content: ""; position: absolute; inset: 0; z-index: 1; opacity: .18; mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-    .vignette::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 50px rgba(0,0,0,.45); }
-
-    .obj { position: absolute; filter: drop-shadow(3px 7px 5px rgba(0,0,0,.4)); pointer-events: none; }
-    .obj-pencil { width: 320px; height: 22px; left: -10%; bottom: 38px; transform: rotate(-24deg); z-index: 5; }
-    .obj-steel { right: -170px; bottom: -6px; transform: rotate(-11deg); z-index: 2; }
-    .obj-clip { width: 58px; left: 60px; top: 30px; transform: rotate(-12deg); z-index: 6; }
-    .obj-paperclip { width: 26px; z-index: 1; }
-    .obj-paperclip.a { right: 4%; top: 40px; transform: rotate(22deg); }
-    .obj-paperclip.b { left: 46%; bottom: 120px; transform: rotate(-58deg); }
-    .obj-eraser { width: 74px; left: 44%; bottom: 10px; transform: rotate(14deg); z-index: 2; }
-    .sticker {
-      position: absolute; z-index: 6; left: 4%; bottom: 120px; transform: rotate(-8deg);
-      background: var(--pink); color: #fff; border: 3px solid var(--ink); box-shadow: var(--shadow);
-      font-family: "VT323", monospace; font-size: 22px; padding: 4px 12px; letter-spacing: .05em;
-    }
-
-    @media (max-width: 880px) {
-      .hero .wrap { grid-template-columns: 1fr; padding-top: 52px; padding-bottom: 36px; gap: 34px; }
-      .note { transform: rotate(-.6deg); padding: 30px 22px 26px; }
-      .desk { height: 400px; max-width: 440px; width: 100%; margin: 0 auto; }
-      .print { width: 175px; padding: 9px 9px 0; }
-      .print .cap { font-size: 20px; }
-      .print .tape { width: 76px; height: 22px; margin-left: -38px; }
-      .p2 { left: 30%; }
-      .p3 { top: 175px; right: 0; }
-      .obj-pencil { width: 240px; height: 17px; left: -6%; bottom: 40px; }
-      .obj-steel { right: -260px; bottom: -14px; }
-      .obj-clip { width: 46px; left: 40px; top: 36px; }
-      .obj-paperclip.b { display: none; }
-      .sticker { font-size: 18px; bottom: 110px; left: 0; }
-      .hero-cta .btn { width: 100%; }
-    }
-    @media (max-width: 380px) {
-      .desk { height: 360px; }
-      .print { width: 150px; }
-      .p3 { top: 155px; }
+    /* Phones and small tablets: paper on top, desk objects below */
+    @media (max-width: 1000px) {
+      .hero { background-image: url("/hero/mat-small.webp"); background-size: auto 100%; background-position: left top; }
+      .scene { aspect-ratio: auto; container-type: normal; padding: 40px 16px 0; }
+      .paper {
+        position: relative; left: auto; top: auto; width: 100%; max-width: 560px; height: auto; margin: 0 auto;
+        border-width: 54px 40px 34px; border-image-width: 54px 40px 34px;
+      }
+      .paper-lines { display: none; }
+      .paper-text { position: static; padding: 4px 0 6px; }
+      .hero h1 { font-size: clamp(22px, 6.4vw, 34px); margin-bottom: 14px; }
+      .hero p.lead { font-size: 16px; max-width: none; margin-bottom: 20px; }
+      .hero .btn { font-size: 15px; padding: 14px 20px; border-width: 3px; box-shadow: var(--shadow); width: 100%; }
+      .desk { position: relative; width: 100%; max-width: 480px; aspect-ratio: 1 / 1.08; margin: 18px auto 0; }
+      .i-coffee  { left: 2%;  top: 6%;  width: 41%; }
+      .i-sunsets { left: 50%; top: 2%;  width: 38%; }
+      .i-friends { left: 52%; top: 45%; width: 40%; }
+      .i-clip-s  { left: 90%; top: 10%; width: 7%; }
+      .i-clip-p  { left: 38%; top: 58%; width: 6.5%; }
+      .i-label   { left: 2%;  top: 58%; width: 34%; }
+      .i-pencil  { left: 6%;  top: 66%; width: 46%; }
+      .i-eraser  { left: 38%; top: 86%; width: 13%; }
+      .desk .i-ruler, .desk .i-camera { display: none; }
     }
 
     /* Sections */
@@ -318,85 +278,41 @@
 
   <main>
     <div class="hero">
-      <!-- Cutting mat: rulers, angle guides and soft leaf shadows (decorative) -->
-      <svg class="mat-guides" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1000 600">
-        <g stroke="rgba(255,255,255,.16)" stroke-width="1.2" fill="none" vector-effect="non-scaling-stroke">
-          <path d="M0 600 L600 0" vector-effect="non-scaling-stroke"/>
-          <path d="M0 420 L420 0" vector-effect="non-scaling-stroke"/>
-          <path d="M380 600 L980 0" vector-effect="non-scaling-stroke" stroke-dasharray="6 6"/>
-        </g>
-      </svg>
-<svg class="mat-ruler mat-ruler--top" width="2400" height="30" aria-hidden="true"><text x="48" y="15">1</text><path d="M48 20v8M24 22v5"/><text x="96" y="15">2</text><path d="M96 20v8M72 22v5"/><text x="144" y="15">3</text><path d="M144 20v8M120 22v5"/><text x="192" y="15">4</text><path d="M192 20v8M168 22v5"/><text x="240" y="15">5</text><path d="M240 20v8M216 22v5"/><text x="288" y="15">6</text><path d="M288 20v8M264 22v5"/><text x="336" y="15">7</text><path d="M336 20v8M312 22v5"/><text x="384" y="15">8</text><path d="M384 20v8M360 22v5"/><text x="432" y="15">9</text><path d="M432 20v8M408 22v5"/><text x="480" y="15">10</text><path d="M480 20v8M456 22v5"/><text x="528" y="15">11</text><path d="M528 20v8M504 22v5"/><text x="576" y="15">12</text><path d="M576 20v8M552 22v5"/><text x="624" y="15">13</text><path d="M624 20v8M600 22v5"/><text x="672" y="15">14</text><path d="M672 20v8M648 22v5"/><text x="720" y="15">15</text><path d="M720 20v8M696 22v5"/><text x="768" y="15">16</text><path d="M768 20v8M744 22v5"/><text x="816" y="15">17</text><path d="M816 20v8M792 22v5"/><text x="864" y="15">18</text><path d="M864 20v8M840 22v5"/><text x="912" y="15">19</text><path d="M912 20v8M888 22v5"/><text x="960" y="15">20</text><path d="M960 20v8M936 22v5"/><text x="1008" y="15">21</text><path d="M1008 20v8M984 22v5"/><text x="1056" y="15">22</text><path d="M1056 20v8M1032 22v5"/><text x="1104" y="15">23</text><path d="M1104 20v8M1080 22v5"/><text x="1152" y="15">24</text><path d="M1152 20v8M1128 22v5"/><text x="1200" y="15">25</text><path d="M1200 20v8M1176 22v5"/><text x="1248" y="15">26</text><path d="M1248 20v8M1224 22v5"/><text x="1296" y="15">27</text><path d="M1296 20v8M1272 22v5"/><text x="1344" y="15">28</text><path d="M1344 20v8M1320 22v5"/><text x="1392" y="15">29</text><path d="M1392 20v8M1368 22v5"/><text x="1440" y="15">30</text><path d="M1440 20v8M1416 22v5"/><text x="1488" y="15">31</text><path d="M1488 20v8M1464 22v5"/><text x="1536" y="15">32</text><path d="M1536 20v8M1512 22v5"/><text x="1584" y="15">33</text><path d="M1584 20v8M1560 22v5"/><text x="1632" y="15">34</text><path d="M1632 20v8M1608 22v5"/><text x="1680" y="15">35</text><path d="M1680 20v8M1656 22v5"/><text x="1728" y="15">36</text><path d="M1728 20v8M1704 22v5"/><text x="1776" y="15">37</text><path d="M1776 20v8M1752 22v5"/><text x="1824" y="15">38</text><path d="M1824 20v8M1800 22v5"/><text x="1872" y="15">39</text><path d="M1872 20v8M1848 22v5"/><text x="1920" y="15">40</text><path d="M1920 20v8M1896 22v5"/><text x="1968" y="15">41</text><path d="M1968 20v8M1944 22v5"/><text x="2016" y="15">42</text><path d="M2016 20v8M1992 22v5"/><text x="2064" y="15">43</text><path d="M2064 20v8M2040 22v5"/><text x="2112" y="15">44</text><path d="M2112 20v8M2088 22v5"/><text x="2160" y="15">45</text><path d="M2160 20v8M2136 22v5"/><text x="2208" y="15">46</text><path d="M2208 20v8M2184 22v5"/><text x="2256" y="15">47</text><path d="M2256 20v8M2232 22v5"/><text x="2304" y="15">48</text><path d="M2304 20v8M2280 22v5"/><text x="2352" y="15">49</text><path d="M2352 20v8M2328 22v5"/></svg>
-<svg class="mat-ruler mat-ruler--left" width="30" height="1440" aria-hidden="true"><text x="13" y="52">1</text><path d="M22 48h8M24 24h5"/><text x="13" y="100">2</text><path d="M22 96h8M24 72h5"/><text x="13" y="148">3</text><path d="M22 144h8M24 120h5"/><text x="13" y="196">4</text><path d="M22 192h8M24 168h5"/><text x="13" y="244">5</text><path d="M22 240h8M24 216h5"/><text x="13" y="292">6</text><path d="M22 288h8M24 264h5"/><text x="13" y="340">7</text><path d="M22 336h8M24 312h5"/><text x="13" y="388">8</text><path d="M22 384h8M24 360h5"/><text x="13" y="436">9</text><path d="M22 432h8M24 408h5"/><text x="13" y="484">10</text><path d="M22 480h8M24 456h5"/><text x="13" y="532">11</text><path d="M22 528h8M24 504h5"/><text x="13" y="580">12</text><path d="M22 576h8M24 552h5"/><text x="13" y="628">13</text><path d="M22 624h8M24 600h5"/><text x="13" y="676">14</text><path d="M22 672h8M24 648h5"/><text x="13" y="724">15</text><path d="M22 720h8M24 696h5"/><text x="13" y="772">16</text><path d="M22 768h8M24 744h5"/><text x="13" y="820">17</text><path d="M22 816h8M24 792h5"/><text x="13" y="868">18</text><path d="M22 864h8M24 840h5"/><text x="13" y="916">19</text><path d="M22 912h8M24 888h5"/><text x="13" y="964">20</text><path d="M22 960h8M24 936h5"/><text x="13" y="1012">21</text><path d="M22 1008h8M24 984h5"/><text x="13" y="1060">22</text><path d="M22 1056h8M24 1032h5"/><text x="13" y="1108">23</text><path d="M22 1104h8M24 1080h5"/><text x="13" y="1156">24</text><path d="M22 1152h8M24 1128h5"/><text x="13" y="1204">25</text><path d="M22 1200h8M24 1176h5"/><text x="13" y="1252">26</text><path d="M22 1248h8M24 1224h5"/><text x="13" y="1300">27</text><path d="M22 1296h8M24 1272h5"/><text x="13" y="1348">28</text><path d="M22 1344h8M24 1320h5"/><text x="13" y="1396">29</text><path d="M22 1392h8M24 1368h5"/></svg>
-      <svg class="leaf-shadow" aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 700">
-        <defs><filter id="leafblur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter></defs>
-        <g fill="#000" filter="url(#leafblur)">
-          <ellipse cx="980" cy="80" rx="120" ry="34" transform="rotate(-35 980 80)"/>
-          <ellipse cx="1090" cy="190" rx="110" ry="30" transform="rotate(20 1090 190)"/>
-          <ellipse cx="900" cy="230" rx="95" ry="26" transform="rotate(-60 900 230)"/>
-          <ellipse cx="1150" cy="360" rx="130" ry="32" transform="rotate(-20 1150 360)"/>
-          <ellipse cx="60" cy="620" rx="130" ry="34" transform="rotate(30 60 620)"/>
-          <ellipse cx="190" cy="690" rx="110" ry="28" transform="rotate(-25 190 690)"/>
-          <path d="M760 -20 C900 160 1040 260 1220 300" stroke="#000" stroke-width="14" fill="none"/>
-        </g>
-      </svg>
-
-      <div class="wrap">
-        <div class="note">
-          <span class="tape tape--cream tape--tl" aria-hidden="true"></span>
-          <span class="tape tape--cream tape--tr" aria-hidden="true"></span>
-          <span class="tag">FREE • NO SIGN-UP • 90s VIBES</span>
-          <h1>Turn any photo into a <em>retro instant print</em></h1>
-          <p class="lead">Add vintage film filters, a paper frame and a handwritten caption, then download your print in HD. It takes about 30 seconds and works right in your browser.</p>
-          <div class="hero-cta">
+      <div class="scene">
+        <div class="paper">
+          <div class="paper-lines" aria-hidden="true"></div>
+          <div class="paper-text">
+            <h1>Turn any photo into a <em>retro instant print</em></h1>
+            <p class="lead">Add vintage film filters, a paper frame and a handwritten caption, then download your print in HD. It takes about 30 seconds and works right in your browser.</p>
             <a class="btn btn--pink" href="/editor/">Make your print →</a>
           </div>
-          <ul class="trust">
-            <li>100% free</li>
-            <li>Photos never leave your device</li>
-            <li>Works on phone &amp; desktop</li>
-          </ul>
         </div>
 
         <div class="desk" aria-hidden="true">
-          <div class="print p1"><div class="photo scene-cafe grain vignette"></div><div class="cap">coffee dates ☕</div></div>
-          <div class="print p2"><span class="tape tape--pink"></span><div class="photo scene-sunset grain"></div><div class="cap">chasing sunsets</div></div>
-          <div class="print p3"><span class="tape"></span><div class="photo scene-bw grain vignette"></div><div class="cap">best friends</div></div>
-
-          <!-- Binder clip holding the first print -->
-          <svg class="obj obj-clip" viewBox="0 0 60 64">
-            <path d="M18 22 L12 2 Q11 0 14 0 L18 0 Q20 0 21 2 L28 22" fill="none" stroke="#c7cbd1" stroke-width="3"/>
-            <path d="M42 22 L48 2 Q49 0 46 0 L42 0 Q40 0 39 2 L32 22" fill="none" stroke="#c7cbd1" stroke-width="3"/>
-            <path d="M6 22 H54 L58 60 Q58 64 54 64 H6 Q2 64 2 60 Z" fill="#1b1c1f"/>
-            <path d="M8 26 H52" stroke="#3a3c42" stroke-width="2"/>
-          </svg>
-
-          <!-- Pencil -->
-          <svg class="obj obj-pencil" viewBox="0 0 320 22" preserveAspectRatio="none">
-            <rect x="0" y="1" width="28" height="20" rx="5" fill="#f28da4"/>
-            <rect x="26" y="0" width="26" height="22" fill="#b8bcc3"/>
-            <path d="M32 0v22M38 0v22M44 0v22" stroke="#8d929a" stroke-width="1.5"/>
-            <rect x="52" y="0" width="216" height="22" fill="#f5b82e"/>
-            <path d="M52 7.5H268M52 14.5H268" stroke="#d9961a" stroke-width="1.5"/>
-            <path d="M268 0 L310 9 L310 13 L268 22 Z" fill="#ecc89c"/>
-            <path d="M268 0 Q272 5 268 7 Q272 11 268 14.5 Q272 18 268 22" fill="#f5b82e"/>
-            <path d="M300 7 L318 11 L300 15 Z" fill="#2b2b2b"/>
-          </svg>
-
-
-          <!-- Paper clips -->
-          <svg class="obj obj-paperclip a" viewBox="0 0 26 70"><path d="M8 22 V54 Q8 64 15 64 Q22 64 22 54 V14 Q22 4 13 4 Q4 4 4 14 V56" fill="none" stroke="#d6d9de" stroke-width="2.6" stroke-linecap="round"/></svg>
-          <svg class="obj obj-paperclip b" viewBox="0 0 26 70"><path d="M8 22 V54 Q8 64 15 64 Q22 64 22 54 V14 Q22 4 13 4 Q4 4 4 14 V56" fill="none" stroke="#ff4fae" stroke-width="2.6" stroke-linecap="round"/></svg>
-
-          <!-- Eraser -->
-          <svg class="obj obj-eraser" viewBox="0 0 74 34">
-            <rect x="0" y="2" width="74" height="30" rx="5" fill="#f7f7f5"/>
-            <rect x="22" y="0" width="52" height="34" rx="3" fill="#2563eb"/>
-            <path d="M30 10h36M30 17h28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-<svg class="obj obj-steel" viewBox="0 0 460 40" width="460" height="40" aria-hidden="true"><defs><linearGradient id="steelg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3e5e8"/><stop offset=".5" stop-color="#b9bdc3"/><stop offset="1" stop-color="#9aa0a7"/></linearGradient></defs><rect width="460" height="40" rx="3" fill="url(#steelg)" stroke="#6b7078" stroke-width="1"/><g stroke="#2b2e33" stroke-width="1"><path d="M12 3v14"/><path d="M18 3v6"/><path d="M24 3v6"/><path d="M30 3v6"/><path d="M36 3v6"/><path d="M42 3v10"/><path d="M48 3v6"/><path d="M54 3v6"/><path d="M60 3v6"/><path d="M66 3v6"/><path d="M72 3v14"/><path d="M78 3v6"/><path d="M84 3v6"/><path d="M90 3v6"/><path d="M96 3v6"/><path d="M102 3v10"/><path d="M108 3v6"/><path d="M114 3v6"/><path d="M120 3v6"/><path d="M126 3v6"/><path d="M132 3v14"/><path d="M138 3v6"/><path d="M144 3v6"/><path d="M150 3v6"/><path d="M156 3v6"/><path d="M162 3v10"/><path d="M168 3v6"/><path d="M174 3v6"/><path d="M180 3v6"/><path d="M186 3v6"/><path d="M192 3v14"/><path d="M198 3v6"/><path d="M204 3v6"/><path d="M210 3v6"/><path d="M216 3v6"/><path d="M222 3v10"/><path d="M228 3v6"/><path d="M234 3v6"/><path d="M240 3v6"/><path d="M246 3v6"/><path d="M252 3v14"/><path d="M258 3v6"/><path d="M264 3v6"/><path d="M270 3v6"/><path d="M276 3v6"/><path d="M282 3v10"/><path d="M288 3v6"/><path d="M294 3v6"/><path d="M300 3v6"/><path d="M306 3v6"/><path d="M312 3v14"/><path d="M318 3v6"/><path d="M324 3v6"/><path d="M330 3v6"/><path d="M336 3v6"/><path d="M342 3v10"/><path d="M348 3v6"/><path d="M354 3v6"/><path d="M360 3v6"/><path d="M366 3v6"/><path d="M372 3v14"/><path d="M378 3v6"/><path d="M384 3v6"/><path d="M390 3v6"/><path d="M396 3v6"/><path d="M402 3v10"/><path d="M408 3v6"/><path d="M414 3v6"/><path d="M420 3v6"/><path d="M426 3v6"/><path d="M432 3v14"/><path d="M438 3v6"/><path d="M444 3v6"/><path d="M450 3v6"/></g><g fill="#2b2e33" font-family="VT323,monospace" font-size="12" text-anchor="middle"><text x="72" y="29">1</text><text x="132" y="29">2</text><text x="192" y="29">3</text><text x="252" y="29">4</text><text x="312" y="29">5</text><text x="372" y="29">6</text><text x="432" y="29">7</text></g><circle cx="446" cy="20" r="5" fill="#8a9098" stroke="#5c6168"/></svg>
-          <div class="sticker">HD DOWNLOAD!</div>
+          <div class="it lift-print i-coffee"><img src="/hero/coffee.webp" width="660" height="911" alt="" fetchpriority="high"></div>
+          <div class="it lift-print i-sunsets"><img src="/hero/sunsets.webp" width="640" height="852" alt="" fetchpriority="high"></div>
+          <div class="it lift-print i-friends"><img src="/hero/friends.webp" width="660" height="834" alt=""></div>
+          <div class="it lift-flat i-clip-s"><img src="/hero/clip-silver.webp" width="130" height="177" alt=""></div>
+          <div class="it lift-flat i-clip-p"><img src="/hero/clip-pink.webp" width="150" height="199" alt=""></div>
+          <div class="it lift-flat i-label"><img src="/hero/hdlabel.webp" width="440" height="162" alt=""></div>
+          <div class="it lift-low i-ruler"><img src="/hero/ruler.webp" width="1400" height="136" alt="" loading="lazy"></div>
+          <div class="it lift-low i-eraser"><img src="/hero/eraser.webp" width="240" height="206" alt=""></div>
+          <div class="it lift-low i-pencil"><img src="/hero/pencil.webp" width="900" height="769" alt=""></div>
+          <div class="it lift-high i-camera"><img src="/hero/camera.webp" width="560" height="316" alt="" loading="lazy"></div>
         </div>
+
+        <svg class="leaf-shadow" aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1672 941">
+          <defs><filter id="leafblur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="18"/></filter></defs>
+          <g fill="#000" filter="url(#leafblur)">
+            <ellipse cx="60" cy="60" rx="170" ry="44" transform="rotate(35 60 60)"/>
+            <ellipse cx="210" cy="20" rx="120" ry="30" transform="rotate(-15 210 20)"/>
+            <ellipse cx="1560" cy="60" rx="160" ry="40" transform="rotate(-30 1560 60)"/>
+            <ellipse cx="1630" cy="250" rx="150" ry="36" transform="rotate(25 1630 250)"/>
+            <ellipse cx="1500" cy="420" rx="120" ry="30" transform="rotate(-50 1500 420)"/>
+            <ellipse cx="40" cy="560" rx="150" ry="38" transform="rotate(-35 40 560)"/>
+            <path d="M1180 -30 C1300 120 1460 220 1700 260" stroke="#000" stroke-width="16" fill="none"/>
+          </g>
+        </svg>
       </div>
     </div>
 
